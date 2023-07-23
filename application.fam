@@ -1,0 +1,17 @@
+# For details & more options, see documentation/AppManifests.md in firmware repo
+
+App(
+    appid="remote_keyboard",  # Must be unique
+    name="Remote Keyboard",  # Displayed in menus
+    apptype=FlipperAppType.EXTERNAL,
+    entry_point="remote_keyboard_app",
+    stack_size=2 * 1024,
+    fap_category="Misc",
+    # Optional values
+    # fap_version="0.1",
+    fap_icon="remote_keyboard.png",  # 10x10 1-bit PNG
+    # fap_description="A simple app",
+    fap_author="GerfautGE",
+    # fap_weburl="https://github.com/user/remote_keyboard",
+    fap_icon_assets="images",  # Image assets to compile for this application
+)
