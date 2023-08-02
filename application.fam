@@ -5,11 +5,8 @@ App(
     name="Remote Keyboard",  # Displayed in menus
     apptype=FlipperAppType.EXTERNAL,
     entry_point="remote_keyboard_app",
-    stack_size=2 * 1024,
-    fap_category="Misc",
-    # Optional values
-    # fap_version="0.1",
-    fap_icon="remote_keyboard.png",  # 10x10 1-bit PNG
+    stack_size=3 * 1024,
+    fap_category="Misc_Extra",
     # fap_description="A simple app",
     fap_author="GerfautGE",
     # fap_weburl="https://github.com/user/remote_keyboard",
