@@ -8,6 +8,9 @@ on:
     ## put your main branch name under "braches"
     branches:
       - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   ufbt-build:
