@@ -11,4 +11,5 @@ App(
     fap_author="GerfautGE",
     # fap_weburl="https://github.com/user/remote_keyboard",
     fap_icon_assets="images",  # Image assets to compile for this application
+    fap_icon="remote_keyboard.png",  # Icon to display in menus
 )
