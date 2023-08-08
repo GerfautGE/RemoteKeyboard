@@ -1,4 +1,5 @@
 #include <furi.h>
+#include <furi_hal.h>
 #include <gui/gui.h>
 #include <input/input.h>
 #include <gui/view_dispatcher.h>
@@ -31,7 +32,7 @@ static void app_draw_scene_callback(Canvas* canvas, void* ctx) {
     canvas_draw_icon(canvas, 48, 8, &I_arrow); // arrow icon
     canvas_draw_icon(canvas, 16, 8, &I_usb); // usb icon
     canvas_set_font(canvas, FontSecondary);
-    canvas_draw_str(canvas, 0, 48, "No Conn"); // usb connection status
+    canvas_draw_str(canvas, 0, 48, (app->state.usb_connected) ? "Connected" : "No Conn"); // usb connection status
     canvas_draw_str(canvas, 64, 48, "No Conn"); // bluetooth connection status
 }
 
@@ -87,21 +88,32 @@ static int32_t gui_process(void* p) {
 
 static int32_t usb_process(void* p) {
     RemoteKbApp* app = p;
-    RemoteKbState* state = &(app->state);
+
+    //init USB mode interface (HID)
+    FuriHalUsbInterface* usb_prev_mode = furi_hal_usb_get_config();
+    if(furi_hal_usb_is_locked()) {
+        furi_hal_usb_unlock();
+    }
+    furi_check(furi_hal_usb_set_config(&usb_hid, NULL) == true);
 
     uint32_t events;
     while(true) {
-        events = furi_thread_flags_wait(ThreadStop, FuriFlagWaitAny, FuriFlagWaitAll);
+        events = furi_thread_flags_wait(ThreadEventAll, FuriFlagWaitAny, FuriFlagWaitAll);
+
+        if(furi_hal_hid_is_connected()){
+            app->state.usb_connected = true;
+        } else {
+            app->state.usb_connected = false;
+        }
+
         if(events & ThreadStop) {
             break;
         }
-        if(events & ThreadEventUsbConnect) {
-            state->usb_connected = true;
-        }
-        if(events & ThreadEventUsbDisconnect) {
-            state->usb_connected = false;
-        }
     }
+
+    // reset USB Mode
+    furi_hal_usb_set_config(usb_prev_mode, NULL);
+
     return 0;
 }
 
