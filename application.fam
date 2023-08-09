@@ -5,11 +5,11 @@ App(
     name="Remote Keyboard",  # Displayed in menus
     apptype=FlipperAppType.EXTERNAL,
     entry_point="remote_keyboard_app",
-    stack_size=3 * 1024,
+    stack_size= 1024,
     fap_category="Misc_Extra",
-    # fap_description="A simple app",
+    fap_description="a FlipperZero App for using FlipperZero as a Remote Keyboard using the phone as Bluetooth and the usb as HID",
     fap_author="GerfautGE",
-    # fap_weburl="https://github.com/user/remote_keyboard",
+    fap_weburl="https://github.com/GerfautGE/RemoteKeyboard",
     fap_icon_assets="images",  # Image assets to compile for this application
     fap_icon="remote_keyboard.png",  # Icon to display in menus
 )
