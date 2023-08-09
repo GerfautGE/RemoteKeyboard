@@ -27,13 +27,16 @@ static void app_draw_scene_callback(Canvas* canvas, void* ctx) {
     RemoteKbApp* app = ctx; // context is what is send to the drawer
     UNUSED(app);
 
+    GuiConStatus usb_stat = (app->state.usb_connected) ? stat_conn : stat_no_conn;
+    GuiConStatus bt_stat = stat_no_conn;
+
     canvas_clear(canvas);
     canvas_draw_icon(canvas, 80, 8, &I_bluetooth); // bluetooth icon
     canvas_draw_icon(canvas, 48, 8, &I_arrow); // arrow icon
     canvas_draw_icon(canvas, 16, 8, &I_usb); // usb icon
     canvas_set_font(canvas, FontSecondary);
-    canvas_draw_str(canvas, 0, 48, (app->state.usb_connected) ? "Connected" : "No Conn"); // usb connection status
-    canvas_draw_str(canvas, 64, 48, "No Conn"); // bluetooth connection status
+    canvas_draw_str(canvas, 0 + usb_stat.offset, 48, usb_stat.str); // usb connection status
+    canvas_draw_str(canvas, 64 + bt_stat.offset, 48, bt_stat.str); // bluetooth connection status
 }
 
 static void app_input_callback(InputEvent* input_event, void* ctx) {

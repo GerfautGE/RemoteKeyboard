@@ -8,6 +8,14 @@ typedef struct Status_Ctx {
     Conn_status usb_status;
 } Status_Ctx;
 
+typedef struct GuiConStatus {
+    char* str;
+    int offset;
+} GuiConStatus;
+
+static GuiConStatus stat_conn = {"Connected", 10};
+static GuiConStatus stat_no_conn = {"No Conn", 18};
+
 typedef struct {
     bool usb_connected;
 } RemoteKbState;
