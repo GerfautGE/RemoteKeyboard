@@ -1,11 +1,11 @@
 #ifndef REMOTE_KEYBOARD_H
 #define REMOTE_KEYBOARD_H
 
-#include<stdbool.h>
+#include <stdbool.h>
 
-# define BUFFER_SIZE 256
+#define BUFFER_SIZE 256
 
-typedef enum { INIT, OK, KO, WAITING, READY} Conn_status;
+typedef enum { INIT, OK, KO, WAITING, READY } Conn_status;
 
 typedef struct Status_Ctx {
     Conn_status usb_status;
@@ -29,20 +29,20 @@ typedef enum {
 
 typedef struct RemoteKbApp RemoteKbApp;
 
-typedef struct KbBuffer{
+typedef struct KbBuffer {
     char str[BUFFER_SIZE];
     unsigned char index;
 } KbBuffer;
 
-void queue_in_buffer(KbBuffer* buf, char c){
+void queue_in_buffer(KbBuffer* buf, char c) {
     buf->str[buf->index++] = c;
 }
 
-char queue_out_buffer(KbBuffer* buf){
+char queue_out_buffer(KbBuffer* buf) {
     return buf->str[--(buf->index)];
 }
 
-bool is_buf_empty(KbBuffer* buf){
+bool is_buf_empty(KbBuffer* buf) {
     return buf->index == 0;
 }
 
