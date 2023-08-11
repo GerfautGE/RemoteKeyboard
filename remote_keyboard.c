@@ -1,7 +1,4 @@
 #include <furi.h>
-#include <furi_hal.h>
-#include <gui/gui.h>
-#include <gui/view_dispatcher.h>
 
 #include "include/bt.h"
 #include "include/gui.h"
