@@ -14,6 +14,7 @@ static GuiConStatus stat_no_conn = {"No Conn", 18};
 struct RemoteKbApp {
     FuriThread* gui_thread;
     FuriThread* usb_thread;
+    FuriThread* bt_thread;
 
     KbBuffer* kb_buffer;
     RemoteKbState state;
@@ -128,10 +129,22 @@ static int32_t usb_process(void* p) {
     return 0;
 }
 
+static int32_t bt_process(void* p) {
+    UNUSED(p);
+
+    uint32_t events;
+    while(true) {
+        events = furi_thread_flags_wait(ThreadEventAll, FuriFlagWaitAny, FuriFlagWaitAll);
+        if(events & ThreadStop) break;
+    }
+    return 0;
+}
+
 RemoteKbApp* remotekb_app_alloc() {
     RemoteKbApp* app = malloc(sizeof(RemoteKbApp));
     app->gui_thread = furi_thread_alloc_ex("RemoteKbGui", 1024, gui_process, app);
     app->usb_thread = furi_thread_alloc_ex("RemoteKbUsb", 1024, usb_process, app);
+    app->bt_thread = furi_thread_alloc_ex("RemoteKbBt", 1024, bt_process, app);
 
     app->kb_buffer = malloc(sizeof(KbBuffer));
 
@@ -145,6 +158,7 @@ static void remotekb_app_free(RemoteKbApp* app) {
     furi_assert(app);
     furi_thread_free(app->gui_thread);
     furi_thread_free(app->usb_thread);
+    furi_thread_free(app->bt_thread);
     free(app->kb_buffer);
     free(app);
 }
@@ -160,6 +174,7 @@ int32_t remote_keyboard_app(void* p) {
 
     //start threads
     furi_thread_start(app->usb_thread);
+    furi_thread_start(app->bt_thread);
     furi_thread_start(app->gui_thread);
 
     //wait for gui thread to finish
@@ -167,9 +182,11 @@ int32_t remote_keyboard_app(void* p) {
 
     //send stop to other threads
     thread_send_stop(app->usb_thread);
+    thread_send_stop(app->bt_thread);
 
     //wait for them to finish
     furi_thread_join(app->usb_thread);
+    furi_thread_join(app->bt_thread);
 
     //free app
     remotekb_app_free(app);
