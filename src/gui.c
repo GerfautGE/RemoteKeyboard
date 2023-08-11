@@ -14,7 +14,7 @@ static void app_draw_scene_callback(Canvas* canvas, void* ctx) {
     UNUSED(app);
 
     GuiConStatus usb_stat = (app->state.usb_connected) ? stat_conn : stat_no_conn;
-    GuiConStatus bt_stat = stat_no_conn;
+    GuiConStatus bt_stat = (app->state.bt_connected == BtStatusConnected) ? stat_conn : stat_no_conn;
 
     canvas_clear(canvas);
     canvas_draw_icon(canvas, 80, 8, &I_bluetooth); // bluetooth icon

@@ -16,10 +16,14 @@ void thread_send_stop(FuriThread* thread) {
 
 RemoteKbApp* remotekb_app_alloc() {
     RemoteKbApp* app = malloc(sizeof(RemoteKbApp));
+
+    app->state.bt_connected = false;
+
     app->gui_thread = furi_thread_alloc_ex("RemoteKbGui", 1024, gui_process, app);
     app->usb_thread = furi_thread_alloc_ex("RemoteKbUsb", 1024, usb_process, app);
     app->bt_thread = furi_thread_alloc_ex("RemoteKbBt", 1024, bt_process, app);
 
+    app->bt = furi_record_open(RECORD_BT);
     app->kb_buffer = malloc(sizeof(KbBuffer));
 
     app->kb_buffer->index = 0;
@@ -34,6 +38,7 @@ static void remotekb_app_free(RemoteKbApp* app) {
     furi_thread_free(app->usb_thread);
     furi_thread_free(app->bt_thread);
     free(app->kb_buffer);
+    furi_record_close(RECORD_BT);
     free(app);
 }
 

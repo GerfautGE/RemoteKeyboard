@@ -1,6 +1,7 @@
 #ifndef REMOTE_KEYBOARD_H
 #define REMOTE_KEYBOARD_H
 
+#include <bt/bt_service/bt.h>
 #include "include/buffer.h"
 
 typedef enum { INIT, OK, KO, WAITING, READY } Conn_status;
@@ -11,6 +12,7 @@ typedef struct Status_Ctx {
 
 typedef struct {
     bool usb_connected;
+    BtStatus bt_connected;
 } RemoteKbState;
 
 typedef enum {
@@ -24,6 +26,8 @@ typedef struct RemoteKbApp {
     FuriThread* gui_thread;
     FuriThread* usb_thread;
     FuriThread* bt_thread;
+
+    Bt* bt;
 
     KbBuffer* kb_buffer;
     RemoteKbState state;
